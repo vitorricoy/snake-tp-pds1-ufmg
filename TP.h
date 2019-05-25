@@ -20,10 +20,20 @@ enum Direcao {
     BAIXO = 1,
     ESQUERDA = 2,
     DIREITA = 3,
-    NENHUMA
+    NENHUMA = 4
 };
 
 typedef enum Direcao Direcao;
+
+enum OpcaoMenu {
+    SAIR = 0,
+    FACIL = 1,
+    MEDIO = 2,
+    DIFICIL = 3,
+    HIGHSCORE = 4
+};
+
+typedef enum OpcaoMenu OpcaoMenu;
 
 //Detecta o tamanho do terminal
 //Vitor
@@ -81,10 +91,21 @@ void imprimirMenu(int posSeta);
 //Vitor
 void imprimirBorda(TamanhoTela tamanhoTela);
 
-//Mostra o menu e retorna a dificuldade (1, 2 ou 3) ou se vai sair (0)
+//Mostra o menu e retorna a dificuldade, se vai exeibir os highscores, ou se vai sair
 //Vitor
-int mostrarMenu();
+OpcaoMenu mostrarMenu(TamanhoTela tamanhoTela);
 
+//Mostra o highscore na tela (deve ler de arquivo)
+//Gabriel
+void exibirHighscore(TamanhoTela tamanhoTela);
+
+//Salva o highscore (deve escrever no arquivo)
+//Vitor
+void salvarHighscore(int pontuacao, char[] nomeUsuario);
+
+//Pede o usuário para digitar o nome
+//Gabriel
+char[] obterNomeUsuario(TamanhoTela tamanhoTela);
 
 
 
