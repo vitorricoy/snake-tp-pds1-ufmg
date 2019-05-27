@@ -19,11 +19,21 @@ enum Direcao {
     CIMA = 0,
     BAIXO = 1,
     ESQUERDA = 2,
-    DIREITA = 3,
-    NENHUMA = 4
+    DIREITA = 3
 };
 
 typedef enum Direcao Direcao;
+
+enum Teclas {
+    TECLA_CIMA = 0,
+    TECLA_BAIXO = 1,
+    TECLA_ESQUERDA = 2,
+    TECLA_DIREITA = 3,
+    TECLA_ENTER = 4,
+    NENHUMA_TECLA = 5
+};
+
+typedef enum Teclas Teclas;
 
 enum OpcaoMenu {
     SAIR = 0,
@@ -49,7 +59,7 @@ void limparTela();
 
 //Detecta uma tecla pressionada no teclado, retorna a tecla caso positivo, caso contrario retorna '\0'
 //Vitor
-Direcao detectarTeclado();
+Teclas detectarTeclado();
 
 //Verifica a morte da cobra
 //Gabriel
@@ -83,10 +93,6 @@ void imprimirCobraNova(Coordenada cobraNova[], int tamanhoCobraNova);
 //Gabriel
 void imprimirComida(Coordenada comida);
 
-//Imprime o menu com a seta na posicao posSeta
-//Vitor
-void imprimirMenu(int posSeta);
-
 //Imprime a borda na tela
 //Vitor
 void imprimirBorda(TamanhoTela tamanhoTela);
@@ -101,11 +107,11 @@ void exibirHighscore(TamanhoTela tamanhoTela);
 
 //Salva o highscore (deve escrever no arquivo)
 //Vitor
-void salvarHighscore(int pontuacao, char[] nomeUsuario);
+void salvarHighscore(int pontuacoes[], char nomeUsuario[][20], int quantidadePontuacoes);
 
 //Pede o usuário para digitar o nome
 //Gabriel
-char[] obterNomeUsuario(TamanhoTela tamanhoTela);
+char* obterNomeUsuario(TamanhoTela tamanhoTela);
 
 
 

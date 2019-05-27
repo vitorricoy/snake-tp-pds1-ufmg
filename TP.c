@@ -78,7 +78,7 @@ void imprimirBorda(TamanhoTela tamanhoTela) {
     moverCursorTela(coordenada);
 }
 
-Direcao detectarTeclado() {
+Teclas detectarTeclado() {
     unsigned char c = '\0';
     if(kbhit()){
         c=getch();
@@ -86,39 +86,42 @@ Direcao detectarTeclado() {
             c = getch();
             // ->
             if(c == 77) {
-                return DIREITA;
+                return TECLA_DIREITA;
             }
             // <-
             if(c == 75) {
-                return ESQUERDA;
+                return TECLA_ESQUERDA;
             }
             // Seta para cima
             if(c == 72) {
-                return CIMA;
+                return TECLA_CIMA;
             }
             // Seta para baixo
             if(c == 80) {
-                return BAIXO;
+                return TECLA_BAIXO;
             }
         }
         //A
         if(c == 97) {
-            return ESQUERDA;
+            return TECLA_ESQUERDA;
         }
         //D
         if(c == 100) {
-            return DIREITA;
+            return TECLA_DIREITA;
         }
         //S
         if(c == 115) {
-            return BAIXO;
+            return TECLA_BAIXO;
         }
         //W
         if(c == 119) {
-            return CIMA;
+            return TECLA_CIMA;
+        }
+        if(c == 13) {
+            return TECLA_ENTER;
         }
     }
-    return NENHUMA;
+    return NENHUMA_TECLA;
 }
 
 int verificarComida(Coordenada cobra[], Coordenada comida, int tamanhoCobra) {
@@ -145,5 +148,75 @@ void imprimirCobraNova(Coordenada cobraNova[], int tamanhoCobraNova) {
     for(I = 0; I < tamanhoCobraNova; I++) {
         moverCursorTela(cobraNova[I]);
         printf("%c", 254);
+    }
+}
+
+void salvarHighscore(int pontuacoes[], char nomeUsuario[][20], int quantidadePontuacoes) {
+    FILE *arquivo;
+    arquivo = fopen("data.bin", "wb");
+    fprintf(arquivo, "%d ", quantidadePontuacoes);
+    int I;
+    for(I = 0; I < quantidadePontuacoes; I++) {
+        fprintf(arquivo, "%d %s ", pontuacoes[I], nomeUsuario[I]);
+    }
+    fclose(arquivo);
+}
+
+OpcaoMenu mostrarMenu(TamanhoTela tamanhoTela) {
+    imprimirBorda(tamanhoTela);
+    Coordenada coord;
+    //Jogar - Facil
+    coord.x = tamanhoTela.x/2 - 6;
+    coord.y = tamanhoTela.y/2 - 2;
+    moverCursorTela(coord);
+    printf("Jogar - Facil");
+    //Jogar - Medio
+    coord.x = tamanhoTela.x/2 - 6;
+    coord.y = tamanhoTela.y/2 - 1;
+    moverCursorTela(coord);
+    printf("Jogar - Media");
+    //Jogar - Dificil
+    coord.x = tamanhoTela.x/2 - 7;
+    coord.y = tamanhoTela.y/2;
+    moverCursorTela(coord);
+    printf("Jogar - Dificil");
+    //Highscore
+    coord.x = tamanhoTela.x/2 - 4;
+    coord.y = tamanhoTela.y/2 + 1;
+    moverCursorTela(coord);
+    printf("Highscore");
+    //Sair
+    coord.x = tamanhoTela.x/2 - 2;
+    coord.y = tamanhoTela.y/2 + 2;
+    moverCursorTela(coord);
+    printf("Sair");
+    Teclas tecla = detectarTeclado();
+    int indexSeta = 0, indexAnterior = -1;
+    while(tecla != TECLA_ENTER) {
+        if(tecla == TECLA_CIMA) {
+            indexSeta = indexSeta > 0 ? indexSeta - 1 : indexSeta;
+        }
+        if(tecla == TECLA_BAIXO) {
+            indexSeta = indexSeta < 4 ? indexSeta + 1 : indexSeta;
+        }
+        if(indexSeta != indexAnterior) {
+            coord.x = tamanhoTela.x/2 - 10;
+            coord.y = tamanhoTela.y/2 - 2 + indexAnterior;
+            moverCursorTela(coord);
+            indexAnterior = indexSeta;
+            printf("  ");
+            coord.x = tamanhoTela.x/2 - 10;
+            coord.y = tamanhoTela.y/2 - 2 + indexSeta;
+            moverCursorTela(coord);
+            printf("->");
+        }
+        tecla = detectarTeclado();
+    }
+    switch(indexSeta) {
+        case 0: return FACIL;
+        case 1: return MEDIO;
+        case 2: return DIFICIL;
+        case 3: return HIGHSCORE;
+        case 4: return SAIR;
     }
 }
