@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <wincon.h>
 #include <conio.h>
+#include <time.h>
+#include <stdlib.h>
 #include "TP.h"
 
 TamanhoTela detectarTamanhoTela() {
@@ -136,18 +138,15 @@ int verificarComida(Coordenada cobra[], Coordenada comida, int tamanhoCobra) {
 }
 
 void apagarCobraAntiga(Coordenada cobraAntiga[], int tamanhoCobraAntiga) {
-    int I;
-    for(I = 0; I < tamanhoCobraAntiga; I++) {
-        moverCursorTela(cobraAntiga[I]);
-        printf(" ");
-    }
+    moverCursorTela(cobraAntiga[tamanhoCobraAntiga-1]);
+    printf(" ");
 }
 
 void imprimirCobraNova(Coordenada cobraNova[], int tamanhoCobraNova) {
     int I;
     for(I = 0; I < tamanhoCobraNova; I++) {
         moverCursorTela(cobraNova[I]);
-        printf("%c", 254);
+        printf("%c", '*');
     }
 }
 
@@ -218,5 +217,94 @@ OpcaoMenu mostrarMenu(TamanhoTela tamanhoTela) {
         case 2: return DIFICIL;
         case 3: return HIGHSCORE;
         case 4: return SAIR;
+    }
+}
+
+int verificarMovimento(Direcao direcaoAtual, Direcao novaDirecao) {
+    switch(direcaoAtual) {
+        case BAIXO:
+            if(novaDirecao == ESQUERDA || novaDirecao == DIREITA) {
+                return 1;
+            }
+            return 0;
+        case CIMA:
+            if(novaDirecao == ESQUERDA || novaDirecao == DIREITA) {
+                return 1;
+            }
+            return 0;
+        case DIREITA:
+            if(novaDirecao == CIMA || novaDirecao == BAIXO) {
+                return 1;
+            }
+            return 0;
+        case ESQUERDA:
+            if(novaDirecao == CIMA || novaDirecao == BAIXO) {
+                return 1;
+            }
+            return 0;
+    }
+}
+
+//TESTE
+int main() {
+    TamanhoTela tamanhoTela = detectarTamanhoTela();
+    imprimirBorda(tamanhoTela);
+    Coordenada cobra[200];
+    srand(time(NULL));
+    cobra[0].x = tamanhoTela.x / 2;
+    cobra[0].y = tamanhoTela.y / 2;
+    cobra[1].x = tamanhoTela.x / 2 - 1;
+    cobra[1].y = tamanhoTela.y / 2;
+    cobra[2].x = tamanhoTela.x / 2 - 2;
+    cobra[2].y = tamanhoTela.y / 2;
+    int tamanhoCobra = 3;
+    Coordenada comida = gerarNovaComida(tamanhoTela, cobra, tamanhoCobra);
+    imprimirComida(comida);
+    Direcao direcaoCobra = DIREITA;
+    imprimirCobraNova(cobra, tamanhoCobra);
+    while(1) {
+        Teclas tecla = detectarTeclado();
+        Direcao novaDirecao;
+        apagarCobraAntiga(cobra, tamanhoCobra);
+        switch(tecla) {
+            case TECLA_BAIXO:
+                novaDirecao = BAIXO;
+                if(verificarMovimento(direcaoCobra, novaDirecao))
+                    direcaoCobra = BAIXO;
+                break;
+            case TECLA_CIMA:
+                novaDirecao = CIMA;
+                if(verificarMovimento(direcaoCobra, novaDirecao))
+                    direcaoCobra = CIMA;
+                break;
+            case TECLA_DIREITA:
+                novaDirecao = DIREITA;
+                if(verificarMovimento(direcaoCobra, novaDirecao))
+                    direcaoCobra = DIREITA;
+                break;
+            case TECLA_ESQUERDA:
+                novaDirecao = ESQUERDA;
+                if(verificarMovimento(direcaoCobra, novaDirecao))
+                    direcaoCobra = ESQUERDA;
+                break;
+        }
+        int comeu = verificarComida(cobra, comida, tamanhoCobra);
+        if(comeu) {
+            comida = gerarNovaComida(tamanhoTela, cobra, tamanhoCobra);
+            tamanhoCobra++;
+            imprimirComida(comida);
+        }
+        Coordenada coord;
+        coord.x=0;coord.y=0;
+        moverCursorTela(coord);
+        int I;
+
+        movimentarCobra(cobra, direcaoCobra, tamanhoCobra, comeu);
+        imprimirCobraNova(cobra, tamanhoCobra);
+        Coordenada zero;
+        zero.x = 0;
+        zero.y = 0;
+        moverCursorTela(zero);
+        Sleep(10);
     }
 }

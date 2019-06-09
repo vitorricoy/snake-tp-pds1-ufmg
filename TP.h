@@ -77,9 +77,9 @@ int verificarMovimento(Direcao direcaoAtual, Direcao novaDirecao);
 //Gabriel
 Coordenada gerarNovaComida(TamanhoTela tamanhoTela, Coordenada cobra[], int tamanhoCobra);
 
-//Movimenta a cobra na direcao determinada
+//Movimenta a cobra na direcao determinada e cresce uma posição caso seja necessário
 //Gabriel
-void movimentarCobra(Coordenada cobra[], Direcao direcao, int tamanhoCobra);
+void movimentarCobra(Coordenada cobra[], Direcao direcao, int tamanhoCobra, int deveCrescer);
 
 //Apaga a cobra antiga
 //Vitor
@@ -112,7 +112,3 @@ void salvarHighscore(int pontuacoes[], char nomeUsuario[][20], int quantidadePon
 //Pede o usuário para digitar o nome
 //Gabriel
 char* obterNomeUsuario(TamanhoTela tamanhoTela);
-
-
-
-
