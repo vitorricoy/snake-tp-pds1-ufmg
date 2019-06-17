@@ -65,18 +65,6 @@ Teclas detectarTeclado();
 //Gabriel
 int verificarMorte(Coordenada cobra[], TamanhoTela tamanhoTela, int tamanhoCobra);
 
-//Verifica se a comida foi comida
-//Vitor
-int verificarComida(Coordenada cobra[], Coordenada comida, int tamanhoCobra);
-
-//Verifica se o movimento pressionado é valido
-//Vitor
-int verificarMovimento(Direcao direcaoAtual, Direcao novaDirecao);
-
-//Gera uma nova comida
-//Gabriel
-Coordenada gerarNovaComida(TamanhoTela tamanhoTela, Coordenada cobra[], int tamanhoCobra);
-
 //Movimenta a cobra na direcao determinada e cresce uma posição caso seja necessário
 //Gabriel
 void movimentarCobra(Coordenada cobra[], Direcao direcao, int tamanhoCobra, int deveCrescer);
@@ -88,6 +76,10 @@ void apagarCobraAntiga(Coordenada cobraAntiga[], int tamanhoCobraAntiga);
 //Imprime a cobra nova
 //Vitor
 void imprimirCobraNova(Coordenada cobraNova[], int tamanhoCobraNova);
+
+//Gera Nova Comida
+//Gabriel
+Coordenada gerarNovaComida(TamanhoTela tamanhoTela, Coordenada cobra[], int tamanhoCobra)
 
 //Imprime a comida
 //Gabriel

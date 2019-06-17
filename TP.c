@@ -245,6 +245,114 @@ int verificarMovimento(Direcao direcaoAtual, Direcao novaDirecao) {
     }
 }
 
+void limparTela()
+{
+    system("cls");
+}
+int verificarMorte(Coordenada cobra[], TamanhoTela tamanhoTela, int tamanhoCobra)
+{
+    int i;//Contador
+    for(i=0;i<tamanhoCobra;i++)//Detectar se alguma parte da cobra encostou na borda da tela.    {
+        if((cobra[i].x==tamanhoTela.x)||(cobra[i].y==tamanhoTela.y))
+        {
+            return 1;
+        }
+
+    return 0;
+}
+Coordenada gerarNovaComida(TamanhoTela tamanhoTela, Coordenada cobra[], int tamanhoCobra)
+{
+
+    Coordenada comida;
+    NovaComida.x=rand()%(tamanhotela.x-1);
+    NovaComida.y=rand()%(tamanhoTela.y-1);
+    return comida;
+}
+void movimentarCobra(Coordenada cobra[], Direcao direcao, int tamanhoCobra, int deveCrescer)
+{
+   if(deveCrescer==1)
+   {
+       tamanhoCobra=tamanhoCobra + 1;
+   }
+   if(direcao==0)//Movimentar cobra para cima.
+   {
+       cobra[0].y = cobra[0].y + 1;
+   }
+   else if(direcao==1)
+   {
+       cobra[0].y = cobra[0].y - 1;
+   }
+   else if(direcao==2)
+   {
+       cobra[0].x = cobra[0].x - 1;
+   }
+   else
+   {
+       cobra[0].x=cobra[0].x + 1;
+   }
+   int i;//Contador
+   for(i=tamanhoCobra;i>0;i--)
+       {
+           cobra[i].x = cobra[i-1].x;
+           cobra[i].y = cobra[i-1].y;
+       }
+}
+void imprimirComida(Coordenada comida)
+{
+    moverCursorTela(comida);
+    printf("%c",'*');
+}
+void exibirHighscore(TamanhoTela tamanhoTela)
+{
+   FILE *arq;
+   int highscore,aux,aux2;
+   hishscore=0;
+   arq=fopen("data.txt","r")
+   Coordenada nachouarq;//Coordenada para printar que não foi possível encontrar o arquivo do highscore.
+   nachouarq.x=tamanhoTela.x/2 - 18;
+   nachouarq.y=tamanhoTela.y/2;
+   Coordenada printarhighscore;//Coordenada para inciar o print do highscore.
+   int numcaracter;//Número de caracteres do highscore.
+   if(arq==NULL)
+   {
+     moverCursorTela(nachouarq);
+     printf("Nao foi possivel encontrar o arquivo.");
+   }
+   else
+   {
+     while(!f(eof))
+     {
+         fscanf(arq,"%d",&aux);
+         if(aux>highscore)
+         {
+             highscore=aux;
+         }
+     }
+     numcaracter=0;
+     aux2=highscore;
+     while(aux2>=1)
+     {
+         aux2=aux/10;
+         numcaracter=numcaracter+1;
+     }
+     printarhighscore.x=tamanhoTela.x/2 - numcaracter/2 - 6;
+     printarhighscore.y=tamanhoTela.y/2;
+     moverCursorTela(printarhighscore);
+     printf("Highscore: %i", highscore);
+   }
+}
+char* obterNomeUsuario(TamanhoTela tamanhoTela)
+{
+    Coordenada printfinstrucoes;
+    char *nomeUsuário;
+    printfinstrucoes.y==tamanhoTela.y/2;
+    printfinstrucoes.x=tamanhoTela.y/2 -9;
+    moverCursorTela(printfinstrucoes);
+    printf("Nome do usuario : ");
+    fflush(stdin);
+    gets(nomeUsuário);
+    return nomeUsuário;
+}
 //TESTE
 int main() {
     TamanhoTela tamanhoTela = detectarTamanhoTela();
