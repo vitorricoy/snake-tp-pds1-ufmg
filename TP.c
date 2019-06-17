@@ -152,7 +152,7 @@ void imprimirCobraNova(Coordenada cobraNova[], int tamanhoCobraNova) {
 
 void salvarHighscore(int pontuacoes[], char nomeUsuario[][20], int quantidadePontuacoes) {
     FILE *arquivo;
-    arquivo = fopen("data.bin", "wb");
+    arquivo = fopen("data.txt", "w");
     fprintf(arquivo, "%d ", quantidadePontuacoes);
     int I;
     for(I = 0; I < quantidadePontuacoes; I++) {
@@ -249,6 +249,7 @@ void limparTela()
 {
     system("cls");
 }
+
 int verificarMorte(Coordenada cobra[], TamanhoTela tamanhoTela, int tamanhoCobra)
 {
     int i;//Contador
@@ -260,19 +261,22 @@ int verificarMorte(Coordenada cobra[], TamanhoTela tamanhoTela, int tamanhoCobra
 
     return 0;
 }
+
 Coordenada gerarNovaComida(TamanhoTela tamanhoTela, Coordenada cobra[], int tamanhoCobra)
 {
-
     Coordenada comida;
-    NovaComida.x=rand()%(tamanhotela.x-1);
-    NovaComida.y=rand()%(tamanhoTela.y-1);
+    comida.x=rand()%(tamanhoTela.x-1);
+    comida.y=rand()%(tamanhoTela.y-1);
     return comida;
 }
-void movimentarCobra(Coordenada cobra[], Direcao direcao, int tamanhoCobra, int deveCrescer)
+
+void movimentarCobra(Coordenada cobra[], Direcao direcao, int tamanhoCobra)
 {
-   if(deveCrescer==1)
+   int i;//Contador
+   for(i=tamanhoCobra;i>0;i--)
    {
-       tamanhoCobra=tamanhoCobra + 1;
+       cobra[i].x = cobra[i-1].x;
+       cobra[i].y = cobra[i-1].y;
    }
    if(direcao==0)//Movimentar cobra para cima.
    {
@@ -290,24 +294,20 @@ void movimentarCobra(Coordenada cobra[], Direcao direcao, int tamanhoCobra, int 
    {
        cobra[0].x=cobra[0].x + 1;
    }
-   int i;//Contador
-   for(i=tamanhoCobra;i>0;i--)
-       {
-           cobra[i].x = cobra[i-1].x;
-           cobra[i].y = cobra[i-1].y;
-       }
 }
+
 void imprimirComida(Coordenada comida)
 {
     moverCursorTela(comida);
-    printf("%c",'*');
+    printf("%c",254);
 }
+
 void exibirHighscore(TamanhoTela tamanhoTela)
 {
    FILE *arq;
    int highscore,aux,aux2;
-   hishscore=0;
-   arq=fopen("data.txt","r")
+   highscore=0;
+   arq=fopen("data.txt","r");
    Coordenada nachouarq;//Coordenada para printar que não foi possível encontrar o arquivo do highscore.
    nachouarq.x=tamanhoTela.x/2 - 18;
    nachouarq.y=tamanhoTela.y/2;
@@ -320,7 +320,7 @@ void exibirHighscore(TamanhoTela tamanhoTela)
    }
    else
    {
-     while(!f(eof))
+     while(!feof(arq))
      {
          fscanf(arq,"%d",&aux);
          if(aux>highscore)
@@ -344,15 +344,16 @@ void exibirHighscore(TamanhoTela tamanhoTela)
 char* obterNomeUsuario(TamanhoTela tamanhoTela)
 {
     Coordenada printfinstrucoes;
-    char *nomeUsuário;
+    char *nomeUsuario;
     printfinstrucoes.y==tamanhoTela.y/2;
     printfinstrucoes.x=tamanhoTela.y/2 -9;
     moverCursorTela(printfinstrucoes);
     printf("Nome do usuario : ");
     fflush(stdin);
-    gets(nomeUsuário);
-    return nomeUsuário;
+    gets(nomeUsuario);
+    return nomeUsuario;
 }
+
 //TESTE
 int main() {
     TamanhoTela tamanhoTela = detectarTamanhoTela();
@@ -413,6 +414,21 @@ int main() {
         zero.x = 0;
         zero.y = 0;
         moverCursorTela(zero);
-        Sleep(10);
+        if(verificarMorte(cobra, tamanhoTela, tamanhoCobra)) {
+            memset(cobra, 0, sizeof(Coordenada)*200);
+            cobra[0].x = tamanhoTela.x / 2;
+            cobra[0].y = tamanhoTela.y / 2;
+            cobra[1].x = tamanhoTela.x / 2 - 1;
+            cobra[1].y = tamanhoTela.y / 2;
+            cobra[2].x = tamanhoTela.x / 2 - 2;
+            cobra[2].y = tamanhoTela.y / 2;
+            int tamanhoCobra = 3;
+            Coordenada comida = gerarNovaComida(tamanhoTela, cobra, tamanhoCobra);
+            imprimirComida(comida);
+            Direcao direcaoCobra = DIREITA;
+            limparTela();
+            imprimirBorda(tamanhoTela);
+        }
+        Sleep(50);
     }
 }
