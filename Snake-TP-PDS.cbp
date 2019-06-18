@@ -31,11 +31,11 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="TP.c">
+		<Unit filename="src/TP.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="TP.h" />
-		<Unit filename="main.c">
+		<Unit filename="src/TP.h" />
+		<Unit filename="src/main.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Extensions>

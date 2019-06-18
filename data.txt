@@ -1,8 +1,8 @@
 10 36 Vitor
- 9 B
- 9 D
- 9 Vitor
- 9 A
+ 30 Vitor
+ 15 Vitor
+ 14 Vitor
+ 12 Vitor
  9 F
  9 G
  9 H
