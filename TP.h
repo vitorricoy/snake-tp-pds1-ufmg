@@ -107,7 +107,7 @@ void exibirHighscore(TamanhoTela tamanhoTela);
 
 //Salva o highscore (deve escrever no arquivo)
 //Vitor
-void salvarHighscore(int pontuacoes[], char nomeUsuario[][20], int quantidadePontuacoes);
+void salvarHighscore(int pontuacao, char* nomeUsuario);
 
 //Pede o usuário para digitar o nome
 //Gabriel

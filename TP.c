@@ -18,7 +18,6 @@ TamanhoTela detectarTamanhoTela() {
 	if (console == INVALID_HANDLE_VALUE)
 		return tamanho;
 
-	/* Calculate the size of the console window. */
 	if (GetConsoleScreenBufferInfo(console, &info) == 0)
 		return tamanho;
 	CloseHandle(console);
@@ -128,7 +127,7 @@ Teclas detectarTeclado() {
 
 int verificarComida(Coordenada cobra[], Coordenada comida, int tamanhoCobra) {
     int I;
-    //Caso ocorra um bug e a comida apareça dentro da cobra, ela será coletada
+    //Caso ocorra um bug e a comida apareï¿½a dentro da cobra, ela serï¿½ coletada
     for(I = 0; I < tamanhoCobra; I++) {
         if(cobra[I].x == comida.x && cobra[I].y == comida.y) {
             return 1;
@@ -150,13 +149,50 @@ void imprimirCobraNova(Coordenada cobraNova[], int tamanhoCobraNova) {
     }
 }
 
-void salvarHighscore(int pontuacoes[], char nomeUsuario[][20], int quantidadePontuacoes) {
+void salvarHighscore(int pontuacao, char* nomeUsuario) {
     FILE *arquivo;
+    arquivo = fopen("data.txt", "r");
+    int numPontuacoes = 0, I, J;
+    int pontuacoes[11];
+    char* nomes[11];
+    for(I=0; I<11; I++) {
+        nomes[I] = malloc(sizeof(char)*21);
+    }
+    if(arquivo != NULL && !feof(arquivo)) {
+        fscanf(arquivo, "%d ", &numPontuacoes);
+        for(I = 0; I < numPontuacoes; I++) {
+            fscanf(arquivo, "%d ", &pontuacoes[I]);
+            fgets(nomes[I], 20, arquivo);
+        }
+        fclose(arquivo);
+    }
+    pontuacoes[numPontuacoes] = pontuacao;
+    nomes[numPontuacoes] = nomeUsuario;
+    //Ordena as pontuacoes
+    for(I=0; I<numPontuacoes+1; I++) {
+        int maior = I;
+        int maiorVal = 0;
+        for(J=I; J<numPontuacoes+1; J++) {
+            if(pontuacoes[J] > maiorVal) {
+                maior = J;
+                maiorVal = pontuacoes[J];
+            }
+        }
+        int aux = pontuacoes[I];
+        char* aux2 = malloc(sizeof(char)*21);
+        strcpy(aux2, nomes[I]);
+        pontuacoes[I] = maiorVal;
+        strcpy(nomes[I], nomes[maior]);
+        pontuacoes[maior] = aux;
+        strcpy(nomes[maior], aux2);
+    }
+    if(numPontuacoes < 10) {
+        numPontuacoes++;
+    }
     arquivo = fopen("data.txt", "w");
-    fprintf(arquivo, "%d ", quantidadePontuacoes);
-    int I;
-    for(I = 0; I < quantidadePontuacoes; I++) {
-        fprintf(arquivo, "%d %s ", pontuacoes[I], nomeUsuario[I]);
+    fprintf(arquivo, "%d ", numPontuacoes);
+    for(I=0; I<numPontuacoes; I++) {
+        fprintf(arquivo, "%d %s ", pontuacoes[I], nomes[I]);
     }
     fclose(arquivo);
 }
@@ -305,61 +341,90 @@ void imprimirComida(Coordenada comida)
 void exibirHighscore(TamanhoTela tamanhoTela)
 {
    FILE *arq;
-   int highscore,aux,aux2;
-   highscore=0;
+   int quantHighscores, I;
+   int pontuacoes[10], maxPontuacao = 0;
+   char nomeUsuario[10][21];
    arq=fopen("data.txt","r");
-   Coordenada nachouarq;//Coordenada para printar que não foi possível encontrar o arquivo do highscore.
-   nachouarq.x=tamanhoTela.x/2 - 18;
+   Coordenada nachouarq;//Coordenada para printar que nï¿½o foi possï¿½vel encontrar o arquivo do highscore.
+   nachouarq.x=tamanhoTela.x/2 - 17;
    nachouarq.y=tamanhoTela.y/2;
    Coordenada printarhighscore;//Coordenada para inciar o print do highscore.
-   int numcaracter;//Número de caracteres do highscore.
+   int numcaracter;//Numero de caracteres do highscore.
    if(arq==NULL)
    {
      moverCursorTela(nachouarq);
-     printf("Nao foi possivel encontrar o arquivo.");
+     printf("Voce ainda nao possui um highscore.");
+     fflush(stdin);
+     getch();
    }
    else
    {
-     while(!feof(arq))
+     if(!feof(arq))
      {
-         fscanf(arq,"%d",&aux);
-         if(aux>highscore)
-         {
-             highscore=aux;
+         fscanf(arq,"%d ",&quantHighscores);
+         for(I=0; I<quantHighscores; I++) {
+            fscanf(arq, "%d ", &pontuacoes[I]);
+            if(pontuacoes[I] > maxPontuacao) {
+                maxPontuacao = pontuacoes[I];
+            }
+            fgets(nomeUsuario[I], 20, arq);
+            nomeUsuario[I][strlen(nomeUsuario[I])-1] = '\0';
          }
+     } else {
+        Coordenada semHighscore;
+        semHighscore.y = tamanhoTela.y/2;
+        semHighscore.x = tamanhoTela.x/2 - 17;
+        printf("Voce ainda nao possui um highscore.");
+        fflush(stdin);
+        getch();
+        return;
      }
+     fclose(arq);
      numcaracter=0;
-     aux2=highscore;
-     while(aux2>=1)
+     int aux=maxPontuacao;
+     while(aux>=1)
      {
-         aux2=aux/10;
+         aux/=10;
          numcaracter=numcaracter+1;
      }
-     printarhighscore.x=tamanhoTela.x/2 - numcaracter/2 - 6;
-     printarhighscore.y=tamanhoTela.y/2;
+     printarhighscore.x=tamanhoTela.x/2 - 15;
+     printarhighscore.y=tamanhoTela.y/2 - (quantHighscores/2) - 1;
      moverCursorTela(printarhighscore);
-     printf("Highscore: %i", highscore);
+     printf("Nome                Pontuacao");
+     int J;
+     for(I=0; I<quantHighscores; I++) {
+         int tamanhoNome = strlen(nomeUsuario[I]);
+         printarhighscore.x = tamanhoTela.x/2 - 15 - (I > 10 ? 4 : 3);
+         printarhighscore.y = tamanhoTela.y/2 + (I - quantHighscores/2);
+         moverCursorTela(printarhighscore);
+         printf("%d. %s", I+1, nomeUsuario);
+         for(J=0; J<20 - tamanhoNome; J++) {
+            printf(" ");
+         }
+         printf("%d", pontuacoes[I]);
+     }
+     fflush(stdin);
+     getch();
    }
 }
 char* obterNomeUsuario(TamanhoTela tamanhoTela)
 {
     Coordenada printfinstrucoes;
-    char *nomeUsuario;
-    printfinstrucoes.y==tamanhoTela.y/2;
-    printfinstrucoes.x=tamanhoTela.y/2 -9;
+    char *nomeUsuario = malloc(sizeof(char) * 20);
+    printfinstrucoes.y=tamanhoTela.y/2;
+    printfinstrucoes.x=tamanhoTela.x/2 -9;
     moverCursorTela(printfinstrucoes);
     printf("Nome do usuario : ");
     fflush(stdin);
-    gets(nomeUsuario);
+    fgets(nomeUsuario, 20, stdin);
     return nomeUsuario;
 }
 
-//TESTE
-int main() {
-    TamanhoTela tamanhoTela = detectarTamanhoTela();
+void gameLoop(TamanhoTela tamanhoTela, OpcaoMenu dificuldade) {
+    char* nomeUsuario = obterNomeUsuario(tamanhoTela);
+    limparTela();
     imprimirBorda(tamanhoTela);
     Coordenada cobra[200];
-    srand(time(NULL));
     cobra[0].x = tamanhoTela.x / 2;
     cobra[0].y = tamanhoTela.y / 2;
     cobra[1].x = tamanhoTela.x / 2 - 1;
@@ -407,28 +472,42 @@ int main() {
         coord.x=0;coord.y=0;
         moverCursorTela(coord);
         int I;
-
-        movimentarCobra(cobra, direcaoCobra, tamanhoCobra, comeu);
+        movimentarCobra(cobra, direcaoCobra, tamanhoCobra);
         imprimirCobraNova(cobra, tamanhoCobra);
         Coordenada zero;
         zero.x = 0;
         zero.y = 0;
         moverCursorTela(zero);
         if(verificarMorte(cobra, tamanhoTela, tamanhoCobra)) {
-            memset(cobra, 0, sizeof(Coordenada)*200);
-            cobra[0].x = tamanhoTela.x / 2;
-            cobra[0].y = tamanhoTela.y / 2;
-            cobra[1].x = tamanhoTela.x / 2 - 1;
-            cobra[1].y = tamanhoTela.y / 2;
-            cobra[2].x = tamanhoTela.x / 2 - 2;
-            cobra[2].y = tamanhoTela.y / 2;
-            int tamanhoCobra = 3;
-            Coordenada comida = gerarNovaComida(tamanhoTela, cobra, tamanhoCobra);
-            imprimirComida(comida);
-            Direcao direcaoCobra = DIREITA;
-            limparTela();
-            imprimirBorda(tamanhoTela);
+            salvarHighscore(tamanhoCobra * dificuldade, nomeUsuario);
+            return;
         }
-        Sleep(50);
+        if(dificuldade == DIFICIL) {
+            Sleep(10);
+        }
+
+        if(dificuldade == MEDIO) {
+            Sleep(50);
+        }
+
+        if(dificuldade == FACIL) {
+            Sleep(80);
+        }
     }
 }
+
+int main() {
+    TamanhoTela tamanhoTela = detectarTamanhoTela();
+    srand(time(NULL));
+    while(1) {
+        limparTela();
+        OpcaoMenu opcaoMenu = mostrarMenu(tamanhoTela);
+        limparTela();
+        switch(opcaoMenu) {
+            case SAIR: return 0;
+            case HIGHSCORE: exibirHighscore(tamanhoTela); break;
+            default: gameLoop(tamanhoTela, opcaoMenu); break;
+        }
+    }
+}
+
