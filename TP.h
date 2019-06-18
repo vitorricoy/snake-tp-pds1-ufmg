@@ -1,3 +1,6 @@
+#ifndef TP_H
+#define TP_H
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -112,3 +115,5 @@ void salvarHighscore(int pontuacao, char* nomeUsuario);
 //Pede o usuário para digitar o nome
 //Gabriel
 char* obterNomeUsuario(TamanhoTela tamanhoTela);
+
+#endif TP_H

@@ -51,10 +51,6 @@ void gameLoop(TamanhoTela tamanhoTela, OpcaoMenu dificuldade) {
             tamanhoCobra++;
             imprimirComida(comida);
         }
-        Coordenada coord;
-        coord.x=0;coord.y=0;
-        moverCursorTela(coord);
-        int I;
         movimentarCobra(cobra, direcaoCobra, tamanhoCobra);
         imprimirCobraNova(cobra, tamanhoCobra);
         Coordenada zero;
@@ -62,7 +58,7 @@ void gameLoop(TamanhoTela tamanhoTela, OpcaoMenu dificuldade) {
         zero.y = 0;
         moverCursorTela(zero);
         if(verificarMorte(cobra, tamanhoTela, tamanhoCobra)) {
-            salvarHighscore(tamanhoCobra, nomeUsuario);
+            salvarHighscore(tamanhoCobra * dificuldade, nomeUsuario);
             return;
         }
         if(dificuldade == DIFICIL) {
@@ -85,6 +81,7 @@ int main() {
     while(1) {
         limparTela();
         OpcaoMenu opcaoMenu = mostrarMenu(tamanhoTela);
+        limparTela();
         switch(opcaoMenu) {
             case SAIR: return 0;
             case HIGHSCORE: exibirHighscore(tamanhoTela); break;

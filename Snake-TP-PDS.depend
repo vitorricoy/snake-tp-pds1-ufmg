@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1560868547 source:c:\users\dell\desktop\snake-tp-pds1-ufmg\main.c
+	"TP.h"
+	<stdlib.h>
+	<time.h>
+	<windows.h>
+
+1560868688 c:\users\dell\desktop\snake-tp-pds1-ufmg\tp.h
+	<stdio.h>
+	<stdlib.h>
+
