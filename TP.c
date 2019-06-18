@@ -290,7 +290,7 @@ int verificarMorte(Coordenada cobra[], TamanhoTela tamanhoTela, int tamanhoCobra
 {
     int i;//Contador
     for(i=0;i<tamanhoCobra;i++)//Detectar se alguma parte da cobra encostou na borda da tela.    {
-        if((cobra[i].x==tamanhoTela.x)||(cobra[i].y==tamanhoTela.y))
+        if((cobra[i].x==tamanhoTela.x)||(cobra[i].y==tamanhoTela.y)||(cobra[i].x==0)||(cobra[i].y==0))
         {
             return 1;
         }
@@ -314,11 +314,11 @@ void movimentarCobra(Coordenada cobra[], Direcao direcao, int tamanhoCobra)
        cobra[i].x = cobra[i-1].x;
        cobra[i].y = cobra[i-1].y;
    }
-   if(direcao==0)//Movimentar cobra para cima.
+   if(direcao==1)//Movimentar cobra para cima.
    {
        cobra[0].y = cobra[0].y + 1;
    }
-   else if(direcao==1)
+   else if(direcao==0)
    {
        cobra[0].y = cobra[0].y - 1;
    }
