@@ -1,11 +1,11 @@
 10 36 Vitor
+ 33 Teste
  30 Vitor
+ 16 Teste
+ 15 Teste
  15 Vitor
  14 Vitor
  12 Vitor
- 9 F
- 9 G
- 9 H
  9 L
  9 C
  

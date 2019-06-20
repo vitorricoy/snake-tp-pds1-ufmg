@@ -288,12 +288,19 @@ void limparTela()
 
 int verificarMorte(Coordenada cobra[], TamanhoTela tamanhoTela, int tamanhoCobra)
 {
-    int i;//Contador
-    for(i=0;i<tamanhoCobra;i++)//Detectar se alguma parte da cobra encostou na borda da tela.    {
+    int i, j; //Contador
+    //Detectar se alguma parte da cobra encostou na borda da tela.    {
+    for(i=0; i<tamanhoCobra; i++) {
         if((cobra[i].x==tamanhoTela.x)||(cobra[i].y==tamanhoTela.y)||(cobra[i].x==0)||(cobra[i].y==0))
         {
             return 1;
         }
+        for(j = i+1; j<tamanhoCobra; j++) {
+            if(cobra[i].x == cobra[j].x && cobra[i].y == cobra[j].y) {
+                return 1;
+            }
+        }
+    }
 
     return 0;
 }

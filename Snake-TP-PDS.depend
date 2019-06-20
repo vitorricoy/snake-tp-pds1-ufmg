@@ -9,3 +9,22 @@
 	<stdio.h>
 	<stdlib.h>
 
+1560868547 source:c:\users\dell\desktop\snake-tp-pds1-ufmg\src\main.c
+	"TP.h"
+	<stdlib.h>
+	<time.h>
+	<windows.h>
+
+1560868688 c:\users\dell\desktop\snake-tp-pds1-ufmg\src\tp.h
+	<stdio.h>
+	<stdlib.h>
+
+1561033257 source:c:\users\dell\desktop\snake-tp-pds1-ufmg\src\tp.c
+	<windows.h>
+	<stdio.h>
+	<wincon.h>
+	<conio.h>
+	<time.h>
+	<stdlib.h>
+	"TP.h"
+
